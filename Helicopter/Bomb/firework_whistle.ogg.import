@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/firework_whistle.ogg-e3f60277063c10f44528ae9a31cf81c6.oggstr"
+
+[deps]
+
+source_file="res://Helicopter/Bomb/firework_whistle.ogg"
+dest_files=[ "res://.import/firework_whistle.ogg-e3f60277063c10f44528ae9a31cf81c6.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

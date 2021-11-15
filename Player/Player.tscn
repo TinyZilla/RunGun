@@ -1,0 +1,696 @@
+[gd_scene load_steps=68 format=2]
+
+[ext_resource path="res://Entity/Health.gd" type="Script" id=1]
+[ext_resource path="res://Player/PlayerShooting.gd" type="Script" id=2]
+[ext_resource path="res://Player/PlayerStateMachine/PlayerIdle.gd" type="Script" id=3]
+[ext_resource path="res://Player/PlayerStateMachine/PlayerRunning.gd" type="Script" id=4]
+[ext_resource path="res://Player/ShootPivoit.gd" type="Script" id=5]
+[ext_resource path="res://Player/PlayerSprite.gd" type="Script" id=6]
+[ext_resource path="res://Player/Player.gd" type="Script" id=7]
+[ext_resource path="res://Player/PlayerStateMachine/PlayerJumping.gd" type="Script" id=8]
+[ext_resource path="res://Player/PlayerStateMachine/PlayerFalling.gd" type="Script" id=9]
+[ext_resource path="res://Player/PlayerStateMachine/PlayerStateMachine.gd" type="Script" id=10]
+[ext_resource path="res://Player/PlayerAnimatedSprite.gd" type="Script" id=11]
+[ext_resource path="res://Player/gun_firing.ogg" type="AudioStream" id=12]
+[ext_resource path="res://Player/SpriteSheet_player_sliced.png" type="Texture" id=13]
+[ext_resource path="res://Player/PlayerHurtbox.gd" type="Script" id=14]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 6.5, 13 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 13 )
+region = Rect2( 90, 90, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 13 )
+region = Rect2( 135, 90, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 13 )
+region = Rect2( 180, 90, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 13 )
+region = Rect2( 225, 90, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 13 )
+region = Rect2( 270, 90, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 13 )
+region = Rect2( 315, 90, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 13 )
+region = Rect2( 0, 135, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 13 )
+region = Rect2( 45, 135, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=10]
+atlas = ExtResource( 13 )
+region = Rect2( 90, 135, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=11]
+atlas = ExtResource( 13 )
+region = Rect2( 135, 135, 45, 45 )
+
+[sub_resource type="AtlasTexture" id=12]
+atlas = ExtResource( 13 )
+region = Rect2( 135, 90, 45, 45 )
+
+[sub_resource type="SpriteFrames" id=13]
+animations = [ {
+"frames": [ SubResource( 2 ) ],
+"loop": true,
+"name": "idle",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 3 ) ],
+"loop": true,
+"name": "fall",
+"speed": 5.0
+}, {
+"frames": [ SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ), SubResource( 10 ), SubResource( 11 ) ],
+"loop": true,
+"name": "run",
+"speed": 10.0
+}, {
+"frames": [ SubResource( 12 ) ],
+"loop": true,
+"name": "jump",
+"speed": 5.0
+} ]
+
+[sub_resource type="Animation" id=14]
+resource_name = "die"
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0, 0.1, 0.2, 0.3 ),
+"transitions": PoolRealArray( 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 57, 58, 59, 60 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootingSprite:modulate")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.4, 0.5, 0.6, 0.7, 0.8, 0.9 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ), Color( 1, 1, 1, 0 ), Color( 1, 1, 1, 1 ) ]
+}
+
+[sub_resource type="Animation" id=15]
+length = 0.75
+loop = true
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.16, 0.31, 0.46, 0.61 ),
+"transitions": PoolRealArray( 1, 1, 1, 1, 1 ),
+"update": 1,
+"values": [ 8, 9, 10, 11, 12 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootPivoit/ShootPoint:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01, 0.31, 0.61 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ Vector2( 12.5092, 4.07704 ), Vector2( 12.5092, 2.85205 ), Vector2( 12.5092, 4.07704 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootPivoit/ShootPoint:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0.0 ]
+}
+
+[sub_resource type="Animation" id=16]
+length = 0.2
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 16 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootPivoit/ShootPoint:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 0.514683, 13.9239 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootPivoit/ShootPoint:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 90.0 ]
+}
+
+[sub_resource type="Animation" id=17]
+length = 0.2
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 17 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootPivoit/ShootPoint:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -0.0309868, -13.1555 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootPivoit/ShootPoint:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ -90.0 ]
+}
+
+[sub_resource type="Animation" id=18]
+length = 0.3
+step = 0.01
+tracks/0/type = "method"
+tracks/0/path = NodePath("ShootingManager")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "doMelee"
+} ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("AnimationTree:parameters/conditions/can_melee")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ false ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootingSprite:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0, 0.3 ),
+"transitions": PoolRealArray( 1, 1 ),
+"update": 0,
+"values": [ Color( 0, 1, 0.203922, 1 ), Color( 1, 1, 1, 1 ) ]
+}
+tracks/3/type = "value"
+tracks/3/path = NodePath("ShootingSprite:frame")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 8 ]
+}
+
+[sub_resource type="Animation" id=19]
+length = 0.25
+loop = true
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.07, 0.13 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 28, 29, 8 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootPivoit/ShootPoint:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 12.5092, 3.0191 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootPivoit/ShootPoint:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 0.0 ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.02 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "shoot"
+} ]
+}
+
+[sub_resource type="Animation" id=20]
+length = 0.25
+loop = true
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.07, 0.13 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 54, 55, 16 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootPivoit/ShootPoint:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( 0.514683, 13.9239 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootPivoit/ShootPoint:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ 90.0 ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.02 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "shoot"
+} ]
+}
+
+[sub_resource type="Animation" id=21]
+length = 0.25
+loop = true
+step = 0.01
+tracks/0/type = "value"
+tracks/0/path = NodePath("ShootingSprite:frame")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/keys = {
+"times": PoolRealArray( 0.01, 0.07, 0.13 ),
+"transitions": PoolRealArray( 1, 1, 1 ),
+"update": 1,
+"values": [ 30, 31, 17 ]
+}
+tracks/1/type = "value"
+tracks/1/path = NodePath("ShootPivoit/ShootPoint:position")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ Vector2( -0.0309868, -13.1555 ) ]
+}
+tracks/2/type = "value"
+tracks/2/path = NodePath("ShootPivoit/ShootPoint:rotation_degrees")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/keys = {
+"times": PoolRealArray( 0.01 ),
+"transitions": PoolRealArray( 1 ),
+"update": 1,
+"values": [ -90.0 ]
+}
+tracks/3/type = "method"
+tracks/3/path = NodePath(".")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/keys = {
+"times": PoolRealArray( 0.02 ),
+"transitions": PoolRealArray( 1 ),
+"values": [ {
+"args": [  ],
+"method": "shoot"
+} ]
+}
+
+[sub_resource type="RectangleShape2D" id=22]
+extents = Vector2( 10.692, 2.36105 )
+
+[sub_resource type="AnimationNodeAnimation" id=23]
+animation = "idle"
+
+[sub_resource type="AnimationNodeAnimation" id=24]
+animation = "die"
+
+[sub_resource type="AnimationNodeAnimation" id=25]
+animation = "idle_down"
+
+[sub_resource type="AnimationNodeAnimation" id=26]
+animation = "idle_up"
+
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "melee"
+
+[sub_resource type="AnimationNodeAnimation" id=28]
+animation = "melee"
+
+[sub_resource type="AnimationNodeAnimation" id=29]
+animation = "shooting"
+
+[sub_resource type="AnimationNodeAnimation" id=30]
+animation = "shooting_down"
+
+[sub_resource type="AnimationNodeAnimation" id=31]
+animation = "shooting_up"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=32]
+switch_mode = 2
+advance_condition = "not_is_shooting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=33]
+advance_condition = "is_shooting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=34]
+advance_condition = "is_looking_up"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=35]
+advance_condition = "not_is_looking_up"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=36]
+advance_condition = "is_shooting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=37]
+switch_mode = 2
+advance_condition = "not_is_shooting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=38]
+switch_mode = 1
+advance_condition = "not_is_looking_up"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=39]
+switch_mode = 1
+advance_condition = "is_looking_up"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=40]
+switch_mode = 1
+advance_condition = "is_looking_down"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=41]
+switch_mode = 1
+advance_condition = "not_is_looking_down"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=42]
+advance_condition = "is_looking_down"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=43]
+advance_condition = "not_is_looking_down"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=44]
+advance_condition = "is_shooting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=45]
+switch_mode = 2
+advance_condition = "not_is_shooting"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=46]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=47]
+advance_condition = "can_melee"
+priority = 0
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=48]
+switch_mode = 2
+advance_condition = "can_melee"
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=49]
+switch_mode = 2
+auto_advance = true
+
+[sub_resource type="AnimationNodeStateMachineTransition" id=50]
+
+[sub_resource type="AnimationNodeStateMachine" id=51]
+"states/ idle/node" = SubResource( 23 )
+"states/ idle/position" = Vector2( 204, 98 )
+states/die/node = SubResource( 24 )
+states/die/position = Vector2( 43, 205.277 )
+states/idle_down/node = SubResource( 25 )
+states/idle_down/position = Vector2( 204, -45 )
+states/idle_up/node = SubResource( 26 )
+states/idle_up/position = Vector2( 204, 209 )
+states/melee/node = SubResource( 28 )
+states/melee/position = Vector2( 12, 98 )
+"states/melee 2/node" = SubResource( 27 )
+"states/melee 2/position" = Vector2( 730, 98 )
+states/shooting/node = SubResource( 29 )
+states/shooting/position = Vector2( 546, 98 )
+states/shooting_down/node = SubResource( 30 )
+states/shooting_down/position = Vector2( 546, -45 )
+states/shooting_up/node = SubResource( 31 )
+states/shooting_up/position = Vector2( 546, 209 )
+transitions = [ "shooting", " idle", SubResource( 32 ), " idle", "shooting", SubResource( 33 ), " idle", "idle_up", SubResource( 34 ), "idle_up", " idle", SubResource( 35 ), "idle_up", "shooting_up", SubResource( 36 ), "shooting_up", "idle_up", SubResource( 37 ), "shooting_up", "shooting", SubResource( 38 ), "shooting", "shooting_up", SubResource( 39 ), "shooting", "shooting_down", SubResource( 40 ), "shooting_down", "shooting", SubResource( 41 ), " idle", "idle_down", SubResource( 42 ), "idle_down", " idle", SubResource( 43 ), "idle_down", "shooting_down", SubResource( 44 ), "shooting_down", "idle_down", SubResource( 45 ), "melee", " idle", SubResource( 46 ), " idle", "melee", SubResource( 47 ), "shooting", "melee 2", SubResource( 48 ), "melee 2", " idle", SubResource( 49 ), " idle", "die", SubResource( 50 ) ]
+start_node = " idle"
+graph_offset = Vector2( -295, -33.7226 )
+
+[sub_resource type="AnimationNodeStateMachinePlayback" id=52]
+
+[sub_resource type="RectangleShape2D" id=53]
+extents = Vector2( 8.66274, 14.4945 )
+
+[node name="Player" type="KinematicBody2D"]
+position = Vector2( 0, -21.375 )
+z_index = 1
+collision_layer = 2
+script = ExtResource( 7 )
+horizontal_speed = 200.0
+jump_height = 70.0
+
+[node name="Health" type="Node" parent="."]
+script = ExtResource( 1 )
+hp = 10
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 8.1758 )
+shape = SubResource( 1 )
+
+[node name="MovementSprite" type="AnimatedSprite" parent="."]
+position = Vector2( -1.05879, -0.264866 )
+frames = SubResource( 13 )
+animation = "idle"
+script = ExtResource( 11 )
+
+[node name="ShootingSprite" type="Sprite" parent="."]
+texture = ExtResource( 13 )
+hframes = 8
+vframes = 8
+frame = 11
+script = ExtResource( 6 )
+
+[node name="ShootingAnimation" type="AnimationPlayer" parent="."]
+anims/die = SubResource( 14 )
+anims/idle = SubResource( 15 )
+anims/idle_down = SubResource( 16 )
+anims/idle_up = SubResource( 17 )
+anims/melee = SubResource( 18 )
+anims/shooting = SubResource( 19 )
+anims/shooting_down = SubResource( 20 )
+anims/shooting_up = SubResource( 21 )
+
+[node name="MovementStates" type="Node" parent="."]
+script = ExtResource( 10 )
+
+[node name="idle" type="Node" parent="MovementStates"]
+script = ExtResource( 3 )
+
+[node name="running" type="Node" parent="MovementStates"]
+script = ExtResource( 4 )
+
+[node name="jumping" type="Node" parent="MovementStates"]
+script = ExtResource( 8 )
+
+[node name="falling" type="Node" parent="MovementStates"]
+script = ExtResource( 9 )
+
+[node name="StateLabel" type="Label" parent="."]
+visible = false
+margin_left = -53.0179
+margin_top = 23.4725
+margin_right = 54.9821
+margin_bottom = 37.4725
+text = "idle"
+align = 1
+valign = 1
+uppercase = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ShootPivoit" type="Node2D" parent="."]
+script = ExtResource( 5 )
+
+[node name="ShootPoint" type="Position2D" parent="ShootPivoit"]
+position = Vector2( 12.5092, 2.85205 )
+
+[node name="Melee" type="Area2D" parent="ShootPivoit"]
+modulate = Color( 1, 0, 0, 1 )
+collision_layer = 0
+collision_mask = 8
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShootPivoit/Melee"]
+position = Vector2( 9.46008, 6.41183 )
+shape = SubResource( 22 )
+
+[node name="ShootingManager" type="Node" parent="."]
+script = ExtResource( 2 )
+
+[node name="AnimationTree" type="AnimationTree" parent="."]
+tree_root = SubResource( 51 )
+anim_player = NodePath("../ShootingAnimation")
+active = true
+parameters/playback = SubResource( 52 )
+parameters/conditions/can_melee = false
+parameters/conditions/is_looking_down = false
+parameters/conditions/is_looking_up = false
+parameters/conditions/is_shooting = false
+parameters/conditions/not_is_looking_down = true
+parameters/conditions/not_is_looking_up = true
+parameters/conditions/not_is_shooting = true
+
+[node name="GunSoundPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 12 )
+volume_db = -15.0
+pitch_scale = 0.6
+
+[node name="Hurtbox" type="Area2D" parent="."]
+monitoring = false
+collision_layer = 2
+collision_mask = 0
+script = ExtResource( 14 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox"]
+position = Vector2( 0, 6.55509 )
+shape = SubResource( 53 )
+
+[connection signal="fatal_damage" from="Health" to="." method="_on_Health_fatal_damage"]
+[connection signal="area_entered" from="ShootPivoit/Melee" to="ShootingManager" method="_on_Melee_area_entered"]
+[connection signal="area_exited" from="ShootPivoit/Melee" to="ShootingManager" method="_on_Melee_area_exited"]

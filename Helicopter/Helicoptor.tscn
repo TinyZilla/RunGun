@@ -1,0 +1,88 @@
+[gd_scene load_steps=15 format=2]
+
+[ext_resource path="res://Entity/EntityBase.tscn" type="PackedScene" id=1]
+[ext_resource path="res://Helicopter/helicopter.png" type="Texture" id=2]
+[ext_resource path="res://Helicopter/Helicoptor.gd" type="Script" id=3]
+[ext_resource path="res://Helicopter/HeliHurtbox.gd" type="Script" id=4]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 34.6082, 10 )
+
+[sub_resource type="AtlasTexture" id=2]
+atlas = ExtResource( 2 )
+region = Rect2( 0, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=3]
+atlas = ExtResource( 2 )
+region = Rect2( 96, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=4]
+atlas = ExtResource( 2 )
+region = Rect2( 192, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=5]
+atlas = ExtResource( 2 )
+region = Rect2( 288, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=6]
+atlas = ExtResource( 2 )
+region = Rect2( 384, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=7]
+atlas = ExtResource( 2 )
+region = Rect2( 480, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=8]
+atlas = ExtResource( 2 )
+region = Rect2( 576, 0, 96, 32 )
+
+[sub_resource type="AtlasTexture" id=9]
+atlas = ExtResource( 2 )
+region = Rect2( 672, 0, 96, 32 )
+
+[sub_resource type="SpriteFrames" id=10]
+animations = [ {
+"frames": [ SubResource( 2 ), SubResource( 3 ), SubResource( 4 ), SubResource( 5 ), SubResource( 6 ), SubResource( 7 ), SubResource( 8 ), SubResource( 9 ) ],
+"loop": true,
+"name": "default",
+"speed": 40.0
+} ]
+
+[node name="Helicoptor" instance=ExtResource( 1 )]
+collision_layer = 0
+script = ExtResource( 3 )
+horizontal_speed = 80.0
+
+[node name="Health" parent="." index="0"]
+hp_max = 600
+hp = 600
+
+[node name="CollisionShape2D" parent="." index="1"]
+position = Vector2( 0, -13.3484 )
+shape = SubResource( 1 )
+
+[node name="AnimatedSprite" type="AnimatedSprite" parent="." index="2"]
+position = Vector2( 27.3724, -24.0688 )
+scale = Vector2( 2, 2 )
+z_index = 1
+frames = SubResource( 10 )
+frame = 3
+playing = true
+flip_h = true
+
+[node name="Sprite" parent="." index="3"]
+flip_h = true
+
+[node name="BombDropTimer" type="Timer" parent="." index="5"]
+wait_time = 3.0
+
+[node name="Hurtbox" type="Area2D" parent="." index="6"]
+position = Vector2( 26.9004, -23.8328 )
+collision_layer = 8
+collision_mask = 0
+script = ExtResource( 4 )
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="Hurtbox" index="0"]
+polygon = PoolVector2Array( -59.0024, 23.9055, -13.9324, 23.9055, 10.1364, 8.80356, 10.1364, -11.4897, -6.38142, -16.6811, -33.2818, -15.9731, -62.07, 5.5, -62.306, 21.0739 )
+
+[connection signal="timeout" from="BombDropTimer" to="." method="_on_BombDropTimer_timeout"]

@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/grunt-death.ogg-5a8f57371218a996f456243f2c6277db.oggstr"
+
+[deps]
+
+source_file="res://AR_Mob/grunt-death.ogg"
+dest_files=[ "res://.import/grunt-death.ogg-5a8f57371218a996f456243f2c6277db.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0

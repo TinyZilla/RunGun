@@ -1,0 +1,15 @@
+[remap]
+
+importer="ogg_vorbis"
+type="AudioStreamOGGVorbis"
+path="res://.import/gun_firing.ogg-0002683f19e93379d71ffd1984c3c826.oggstr"
+
+[deps]
+
+source_file="res://Player/gun_firing.ogg"
+dest_files=[ "res://.import/gun_firing.ogg-0002683f19e93379d71ffd1984c3c826.oggstr" ]
+
+[params]
+
+loop=false
+loop_offset=0
